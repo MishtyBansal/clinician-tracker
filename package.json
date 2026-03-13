@@ -1,0 +1,11 @@
+{
+  "name": "clinician-tracker",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm start"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
