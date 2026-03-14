@@ -10,6 +10,7 @@
   "description": "",
   "type": "module",
   "dependencies": {
+    "@sendgrid/mail": "^8.1.6",
     "@turf/turf": "^7.3.4"
   }
 }

@@ -19,13 +19,18 @@ async function fetchData(baseURL, clinicianID) {
   }
 }
 
-export async function getClinicianData() {
+export async function getClinicianData(test) {
   const baseURL = "https://3qbqr98twd.execute-api.us-west-2.amazonaws.com/test";
   let data = [];
-  for (let i = 1; i < 7; i++) {
-    const userData = await fetchData(baseURL, i);
-    testValidData(userData);
-    data.push(userData);
+  if (!test) {
+    for (let i = 1; i < 7; i++) {
+      const userData = await fetchData(baseURL, i);
+      testValidData(userData);
+      data.push({ ID: i, data: userData });
+    }
+  } else {
+    const testingData = await fetchData(baseURL, 7);
+    data.push({ ID: 7, data: testingData });
   }
   return data;
 }
