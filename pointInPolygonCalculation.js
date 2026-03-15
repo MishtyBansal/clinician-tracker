@@ -3,7 +3,7 @@
 // calculation through package
 // add a try catch for package
 
-// custom calculation
+// attempt to do the math logic with custom calculation; this misses some edge cases
 export function pointInPolygonCalculation(point, polygon) {
   let x = point[0];
   let y = point[1];

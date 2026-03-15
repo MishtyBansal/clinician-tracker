@@ -1,11 +1,12 @@
 import sgMail from "@sendgrid/mail";
+import dotenv from "dotenv";
 
-
-export function sendEmail(subjectIn, textIn) {
+dotenv.config({ path: "./sendgrid.env" });
+export function sendEmail(recipient, subjectIn, textIn) {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
   const msg = {
-    to: "mishtybansal3@gmail.com",
+    to: recipient,
     from: "mishtyb@umich.edu",
     subject: subjectIn,
     text: textIn,
@@ -17,6 +18,6 @@ export function sendEmail(subjectIn, textIn) {
       console.log("Email sent");
     })
     .catch((error) => {
-      console.error(error);
+      console.error("error with sending an email: " + error);
     });
 }

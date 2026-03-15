@@ -11,6 +11,7 @@
   "type": "module",
   "dependencies": {
     "@sendgrid/mail": "^8.1.6",
-    "@turf/turf": "^7.3.4"
+    "@turf/turf": "^7.3.4",
+    "dotenv": "^17.3.1"
   }
 }

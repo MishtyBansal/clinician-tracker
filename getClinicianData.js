@@ -1,33 +1,9 @@
 // will retrieve geoJSON for the 6 clinicians and return an array that stores them
 
-const baseURL = "https://3qbqr98twd.execute-api.us-west-2.amazonaws.com/test";
+const BASE_URL = "https://3qbqr98twd.execute-api.us-west-2.amazonaws.com/test";
 
-export async function getClinicianData(test) {
-  let data = [];
-  if (!test) {
-    for (let i = 1; i < 7; i++) {
-      const userData = await retrieveData(i);
-      try {
-        validateGeoJSONResponse(userData);
-        data.push({ ID: i, data: userData });
-      } catch (error) {
-        console.log(
-          "Skipping clinician",
-          clinicianIDs[i],
-          "- invalid data:",
-          err.message
-        );
-      }
-    }
-  } else {
-    const testingData = await retrieveData(baseURL, 7);
-    data.push({ ID: 7, data: testingData });
-  }
-  return data;
-}
-
-async function retrieveData(clinicianID) {
-  const url = `${baseURL}/clinicianstatus/${clinicianID}`;
+async function fetchClinicianData(clinicianID) {
+  const url = `${BASE_URL}/clinicianstatus/${clinicianID}`;
   try {
     const response = await fetch(url, {
       method: "GET",
@@ -43,10 +19,10 @@ async function retrieveData(clinicianID) {
   }
 }
 
-function validateGeoJSONResponse(data) {
-  if (typeof data !== "object" || data == null)
+function validateGeoJSONResponse(clinicianGeoJSON) {
+  if (typeof clinicianGeoJSON !== "object" || clinicianGeoJSON == null)
     throw new Error("Invalid object: not a GeoJSON object");
-  let features = data.features;
+  let features = clinicianGeoJSON.features;
   if (!Array.isArray(features) || features.length === 0) {
     throw new Error("Invalid Object: features array is missing or empty");
   }
@@ -68,5 +44,15 @@ function validateGeoJSONResponse(data) {
       throw new Error(
         "Invalid object: each object must have one Point and one Polygon"
       );
+  }
+}
+
+export async function getClinicianData(clinicianID) {
+  try {
+    const clinicianData = await fetchClinicianData(clinicianID);
+    validateGeoJSONResponse(clinicianData);
+    return { clinicianID, clinicianData };
+  } catch (error) {
+    throw new Error(`Unable to retrieve clinician ${clinicianID}.`);
   }
 }
