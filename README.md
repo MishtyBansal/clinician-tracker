@@ -25,7 +25,7 @@ Run `npm i` to install all the dependencies from the package.json
 
 ## Environment Variables
 
-Create a `.env` file that contains the development SendGrid API key
+Create a `sendgrid.env` file that contains the development SendGrid API key
 
 ---
 
@@ -92,5 +92,6 @@ The way this behavior is tracked is through a global outOfBoundsState tracker & 
 - Add a way for users to specify specific parameters to run the script with e.g. different number of clinicians, different polling interval, etc
 - Add more emails/types of notifications (e.g. sms sending)
 - Improve error handling in the future with retry sending (in the situation an email fails to send)
+- There is a possibility that the API takes longer than 60 seconds to run: if this occurs, then there could be multiple states running simultaneously, which could hammer the API. I would take this situation into account.
 
 ---
