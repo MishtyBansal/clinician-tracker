@@ -1,9 +1,6 @@
-// checks if the phlebotomist is within the bounds of their geoJSON range
-
-// calculation through package
-// add a try catch for package
-
-// attempt to do the math logic with custom calculation; this misses some edge cases
+// this function is unused and showcases an attempt for a custom calculation to figure out
+// whether a point is inside a polygon
+// (only committed in order to show my attempt -- normally, I would not commit unused code)
 export function pointInPolygonCalculation(point, polygon) {
   let x = point[0];
   let y = point[1];

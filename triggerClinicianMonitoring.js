@@ -2,12 +2,12 @@ import { getClinicianData } from "./getClinicianData.js";
 import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
 import { sendEmail } from "./sendEmail.js";
 
-const outOfBoundsState = new Map(); // tracks the previous out of bounds status for each clinician
-const errorState = new Map(); // tracks the last error thrown for each clinician
+export const outOfBoundsState = new Map(); // tracks the previous out of bounds status for each clinician
+export const errorState = new Map(); // tracks the last error thrown for each clinician
 const OUT_OF_BOUNDS_LIMIT = 5;
 const ALERT_RECIPIENT = "mishtybansal3@gmail.com";
 
-export function checkBoundsAndAlert(allClinicianData, now) {
+export async function checkBoundsAndAlert(allClinicianData, now) {
   for (let i = 0; i < allClinicianData.length; i++) {
     const clinician = allClinicianData[i];
     const features = clinician.clinicianData.features;
@@ -30,15 +30,15 @@ export function checkBoundsAndAlert(allClinicianData, now) {
     };
 
     if (!inside) {
-      if (!outOfBoundsState.isOutOfBounds) {
-        sendEmail(
+      if (!state.isOutOfBounds) {
+        await sendEmail(
           ALERT_RECIPIENT,
           `Clinician ${clinician.clinicianID} is out of bounds`,
           "We've noticed that the following clinician(s) is out of bounds"
         );
-        outOfBoundsState.isOutOfBounds = true;
-        outOfBoundsState.startTime = now;
-        outOfBoundsState.sentFiveMinuteAlert = false;
+        state.isOutOfBounds = true;
+        state.startTime = now;
+        state.sentFiveMinuteAlert = false;
       }
       const minutesOutOfBounds = Math.round((now - state.startTime) / 60000);
 
@@ -46,7 +46,7 @@ export function checkBoundsAndAlert(allClinicianData, now) {
         minutesOutOfBounds >= OUT_OF_BOUNDS_LIMIT &&
         !state.sentFiveMinuteAlert
       ) {
-        sendEmail(
+        await sendEmail(
           ALERT_RECIPIENT,
           `Clinician ${clinician.clinicianID} has been out of bounds for more than 5 minutes!`,
           "We will alert you when we notice they are back in bounds"
@@ -56,12 +56,12 @@ export function checkBoundsAndAlert(allClinicianData, now) {
     } else {
       if (state.isOutOfBounds) {
         const minutesOutOfBounds = Math.round((now - state.startTime) / 60000);
-        sendEmail(
+        await sendEmail(
           ALERT_RECIPIENT,
           `Clinician ${clinician.clinicianID} back in bounds!`,
           `We've noticed that the following clinician(s) are back in bounds after ${minutesOutOfBounds} minutes`
         );
-        state.isOOB = false;
+        state.isOutOfBounds = false;
         state.startTime = null;
         state.sentFiveMinuteAlert = false;
       }
@@ -95,5 +95,5 @@ export async function triggerClinicianMonitoring(clinicianIDsToMonitor) {
     }
   }
   const now = Date.now();
-  checkBoundsAndAlert(allClinicianData, now);
+  await checkBoundsAndAlert(allClinicianData, now);
 }
