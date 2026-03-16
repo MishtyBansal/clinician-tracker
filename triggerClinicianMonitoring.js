@@ -5,7 +5,7 @@ import { sendEmail } from "./sendEmail.js";
 export const outOfBoundsState = new Map(); // tracks the previous out of bounds status for each clinician
 export const errorState = new Map(); // tracks the last error thrown for each clinician
 const OUT_OF_BOUNDS_LIMIT = 5;
-const ALERT_RECIPIENT = "mishtybansal3@gmail.com";
+const ALERT_RECIPIENT = "coding-challenges+alerts@sprinterhealth.com";
 
 export async function checkBoundsAndAlert(allClinicianData, now) {
   for (let i = 0; i < allClinicianData.length; i++) {
